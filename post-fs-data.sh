@@ -17,4 +17,20 @@ ls -ldZ "${cli_apk%/*}"
 find /data/system/package_cache -name "${app_id}-*" -exec ls -ldZ {} \+
 
 header Clear package manager caches
-run_cli_apk com.chiller3.bcr.standalone.ClearPackageManagerCachesKt
+run_cli_apk com.teletalker.app.standalone.ClearPackageManagerCachesKt
+
+# Set Call injection settings for TeleTalker
+
+setprop persist.vendor.audio.fluence.voicecall true
+setprop persist.vendor.audio.fluence.voicecomm true
+setprop persist.vendor.audio.fluence.speaker true
+setprop persist.vendor.radio.enable_voicecall_recording true
+
+# Optional: force reroute audio path (may be needed on some Qualcomm phones)
+service call audio 7 i32 3
+
+# Optional: log for debugging
+log -t tele_ai "TeleTalker: Call audio injection props applied"
+
+
+

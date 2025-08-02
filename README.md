@@ -398,3 +398,4 @@ If you are interested in implementing a new feature and would like to see it inc
 ## License
 
 BCR is licensed under GPLv3. Please see [`LICENSE`](./LICENSE) for the full license text.
+# TeleTalker-MagiskModule

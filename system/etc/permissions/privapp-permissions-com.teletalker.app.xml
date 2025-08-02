@@ -3,5 +3,7 @@
     <privapp-permissions package="com.teletalker.app">
         <permission name="android.permission.CAPTURE_AUDIO_OUTPUT" />
         <permission name="android.permission.CONTROL_INCALL_EXPERIENCE" />
+        <permission name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
     </privapp-permissions>
 </permissions>
