@@ -1,23 +1,48 @@
-# READ_CALL_LOG is a hard-restricted permission in Android 10+. It cannot be
-# granted by the user unless it is exempted by the system. The most common way
-# to do this is via the installer, but that's not applicable when adding new
-# system apps. Instead, we talk to the permission service directly over binder
-# to alter the flags. This command blocks for an arbitrary amount of time
-# because it needs to wait until the primary user unlocks the device.
+#!/system/bin/sh
+# Enhanced service script with streaming support
 
 source "${0%/*}/boot_common.sh" /data/local/tmp/bcr_service.log
 
+# Existing BCR setup
 header Remove hard restrictions
 run_cli_apk com.teletalker.app.standalone.RemoveHardRestrictionsKt
 
 header Package state
 dumpsys package "${app_id}"
 
-# Manually fix the SELinux-label for the device-protected data directory.
-# OxygenOS one OnePlus devices seems to initially create the directory with the
-# wrong label. For example, `u:object_r:app_data_file:s0:c79,c257,c512,c768`
-# instead of `u:object_r:privapp_data_file:s0:c512,c768`. This requires the
-# module to be flashed twice because we don't know what the expected label
-# should be until Android creates /data/data/<id>.
+# Fix SELinux labels
 header Fixing DP storage SELinux label
 restorecon -RDv /data/user_de/0/"${app_id}"
+
+# NEW: Streaming setup
+header Setting up audio streaming
+WORK_DIR="/data/local/tmp/call_injector"
+LOG_FILE="$WORK_DIR/service.log"
+
+# Create working directory
+mkdir -p "$WORK_DIR"
+chmod 777 "$WORK_DIR"
+
+# Copy/update scripts from module
+MODULE_DIR="/data/adb/modules/${app_id}"
+if [ -d "$MODULE_DIR/scripts" ]; then
+    cp "$MODULE_DIR/scripts/"*.sh "$WORK_DIR/" 2>/dev/null
+    chmod 755 "$WORK_DIR/"*.sh
+fi
+
+# Run detection
+echo "$(date): Running mixer detection..." >> "$LOG_FILE"
+if [ -f "$WORK_DIR/detect_mixers.sh" ]; then
+    "$WORK_DIR/detect_mixers.sh" >> "$LOG_FILE" 2>&1
+fi
+
+# Create named pipe for streaming
+PIPE_FILE="$WORK_DIR/audio_stream.pipe"
+rm -f "$PIPE_FILE" 2>/dev/null
+mkfifo "$PIPE_FILE"
+chmod 666 "$PIPE_FILE"
+
+# Set SELinux contexts
+chcon -R u:object_r:app_data_file:s0 "$WORK_DIR" 2>/dev/null
+
+echo "$(date): Audio streaming setup complete" >> "$LOG_FILE"

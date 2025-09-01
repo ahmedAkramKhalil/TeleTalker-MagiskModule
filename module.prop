@@ -1,6 +1,7 @@
 id=com.teletalker.app
-name=teletalker
-version=v1.445
-versionCode=85505
+name=TeleTalker - Call Audio Injector
+version=v2.0
+versionCode=200000
 author=ahmedkhalil
-description=Basic Call Recorder
+description=Advanced Call Recorder with Real-time Audio Streaming Support
+updateJson=https://raw.githubusercontent.com/yourusername/teletalker/main/update.json
