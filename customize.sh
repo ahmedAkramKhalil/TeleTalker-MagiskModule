@@ -1,10 +1,16 @@
 #!/system/bin/sh
+# Copyright (c) Teletalker Digital Solution. All rights reserved.
+# Proprietary and confidential. Unauthorized copying or distribution prohibited.
 # Enhanced installation script with streaming support
 
 ui_print "********************************"
 ui_print " TeleTalker Module v2.0"
 ui_print " Installing with Streaming..."
 ui_print "********************************"
+
+# ⭐ FIXED: APK path using app-release.apk
+APK_PATH="$MODPATH/system/priv-app/com.teletalker.app"
+APK_FILE="$APK_PATH/app-release.apk"
 
 # Detect architecture
 ARCH=$(getprop ro.product.cpu.abi)
@@ -55,14 +61,6 @@ if [ -f "$MODPATH/libs/$SRC_ARCH/libtinyalsa.so" ]; then
     ui_print "  ✓ libtinyalsa.so"
 fi
 
-# Install native injection library if present
-if [ -f "$MODPATH/native/$SRC_ARCH/libcall_audio_injector.so" ]; then
-    ui_print "- Installing native library..."
-    cp "$MODPATH/native/$SRC_ARCH/libcall_audio_injector.so" "$MODPATH/system/$LIB_DIR/"
-    chmod 644 "$MODPATH/system/$LIB_DIR/libcall_audio_injector.so"
-    ui_print "  ✓ libcall_audio_injector.so"
-fi
-
 # Setup working directory
 ui_print "- Setting up working directory..."
 mkdir -p /data/local/tmp/call_injector
@@ -87,6 +85,54 @@ INSTALL_DATE="$(date)"
 ARCH="$SRC_ARCH"
 TINYALSA_SOURCE="module"
 EOF
+
+# ⭐ FIXED: Setup system app structure with correct paths
+ui_print "- Setting up as system privileged app..."
+
+# Ensure directories exist - using com.teletalker.app
+mkdir -p "$APK_PATH"
+mkdir -p "$MODPATH/system/etc/permissions"
+mkdir -p "$MODPATH/system/etc/sysconfig"
+mkdir -p "$MODPATH/system/etc/default-permissions"
+
+
+# Remove any old APK files first
+ui_print "- Cleaning old APK files..."
+rm -f "$APK_PATH"/*.apk.old 2>/dev/null
+rm -f "$APK_PATH"/*.apk.bak 2>/dev/null
+
+# If multiple APKs exist, keep only app-release.apk
+FOUND_APKS=$(find "$APK_PATH" -name "*.apk" -type f 2>/dev/null | wc -l)
+if [ "$FOUND_APKS" -gt 1 ]; then
+    ui_print "! Multiple APKs found, keeping only app-release.apk"
+    find "$APK_PATH" -name "*.apk" -type f ! -name "app-release.apk" -delete
+fi
+
+
+
+# Verify APK exists at correct location
+if [ -f "$APK_FILE" ]; then
+    APK_SIZE=$(du -h "$APK_FILE" | cut -f1)
+    ui_print "  ✓ APK found: app-release.apk"
+    ui_print "    Size: $APK_SIZE"
+    ui_print "    Path: $APK_PATH"
+else
+    ui_print "! WARNING: APK not found!"
+    ui_print "  Expected at: $APK_FILE"
+    ui_print "  Please ensure APK is placed at:"
+    ui_print "  $APK_PATH/app-release.apk"
+fi
+
+
+
+
+# Set permissions for system app files - using app-release.apk
+chmod 644 "$APK_FILE" 2>/dev/null
+chmod 644 "$MODPATH/system/etc/permissions/privapp-permissions-com.teletalker.app.xml" 2>/dev/null
+chmod 644 "$MODPATH/system/etc/sysconfig/config-com.teletalker.app.xml" 2>/dev/null
+chmod 644 "$MODPATH/system/etc/default-permissions/default-permissions-com.teletalker.app.xml" 2>/dev/null
+
+ui_print "  ✓ System app structure ready"
 
 # Clean up installation files
 rm -rf "$MODPATH/libs" 2>/dev/null

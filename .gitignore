@@ -1,0 +1,6 @@
+.DS_Store
+
+# Build outputs / packaged module zips (large binaries, rebuilt from source)
+Archive.zip
+Teletalker-magisk.zip
+Teletalker-magisk-*.zip

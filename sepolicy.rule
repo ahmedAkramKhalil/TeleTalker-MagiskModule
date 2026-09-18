@@ -1,0 +1,16 @@
+# Scoped SELinux policy for TeleTalker audio injection.
+#
+# inject_stream.sh creates a FIFO at /data/local/tmp/call_injector/audio_stream.pipe
+# and relabels it to one of fuse / media_rw_data_file / app_data_file so the app's
+# untrusted_app domain can open it for writing. These rules grant exactly that,
+# so SELinux can stay ENFORCING instead of relying on a global `setenforce 0`.
+#
+# Magisk applies this file (magiskpolicy) at boot.
+
+allow untrusted_app app_data_file fifo_file { open read write getattr append }
+allow untrusted_app media_rw_data_file fifo_file { open read write getattr append }
+allow untrusted_app fuse fifo_file { open read write getattr append }
+
+# Allow the app to traverse the working dir to reach the FIFO.
+allow untrusted_app app_data_file dir { search getattr }
+allow untrusted_app media_rw_data_file dir { search getattr }

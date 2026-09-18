@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Declarative default runtime-permission grants for com.teletalker.app.
+
+  The platform's DefaultPermissionGrantPolicy applies these at first boot (and
+  whenever the permission policy is re-evaluated), which is race-free and far
+  more reliable across OEMs than pushing `pm grant` from a boot script.
+  fixed="true" also exempts the grants from Android's unused-app permission
+  auto-reset — important for a background call app that may be idle between
+  calls. ensure_privileges() in the boot scripts remains as a runtime backup.
+
+  Only RUNTIME (dangerous) permissions belong here; signature|privileged perms
+  come from the privapp allowlist.
+-->
+<exceptions>
+    <exception package="com.teletalker.app">
+        <permission name="android.permission.RECORD_AUDIO" fixed="true"/>
+        <permission name="android.permission.CALL_PHONE" fixed="true"/>
+        <permission name="android.permission.READ_PHONE_STATE" fixed="true"/>
+        <permission name="android.permission.READ_PHONE_NUMBERS" fixed="true"/>
+        <permission name="android.permission.READ_CONTACTS" fixed="true"/>
+        <permission name="android.permission.ANSWER_PHONE_CALLS" fixed="true"/>
+        <permission name="android.permission.POST_NOTIFICATIONS" fixed="true"/>
+        <permission name="android.permission.READ_MEDIA_AUDIO" fixed="true"/>
+        <permission name="android.permission.BLUETOOTH_CONNECT" fixed="true"/>
+    </exception>
+</exceptions>

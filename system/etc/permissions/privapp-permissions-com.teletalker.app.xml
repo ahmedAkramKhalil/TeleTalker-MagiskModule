@@ -1,9 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Authoritative privileged-permission allowlist for com.teletalker.app.
+  On devices where ro.control_privapp_permissions=enforce, EVERY signature|privileged
+  permission the APK requests must be listed here or the app is denied at boot
+  (and can bootloop). Keep this in sync with the APK's manifest.
+-->
 <permissions>
     <privapp-permissions package="com.teletalker.app">
-        <permission name="android.permission.CAPTURE_AUDIO_OUTPUT" />
+        <!-- Telephony (signature|privileged) -->
+        <permission name="android.permission.CALL_PHONE" />
+        <permission name="android.permission.CALL_PRIVILEGED" />
+        <permission name="android.permission.MODIFY_PHONE_STATE" />
         <permission name="android.permission.CONTROL_INCALL_EXPERIENCE" />
+        <permission name="android.permission.ANSWER_PHONE_CALLS" />
+        <permission name="android.permission.MANAGE_OWN_CALLS" />
+        <permission name="android.permission.READ_PHONE_STATE" />
+        <permission name="android.permission.READ_PHONE_NUMBERS" />
+        <permission name="android.permission.READ_CALL_LOG" />
+        <permission name="android.permission.WRITE_CALL_LOG" />
+        <permission name="android.permission.READ_CONTACTS" />
+        <permission name="android.permission.WRITE_CONTACTS" />
+
+        <!-- Audio capture/injection (signature|privileged) -->
+        <permission name="android.permission.CAPTURE_AUDIO_OUTPUT" />
+        <permission name="android.permission.RECORD_AUDIO" />
         <permission name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
+        <!-- Telecom binding -->
+        <permission name="android.permission.BIND_INCALL_SERVICE" />
+        <permission name="android.permission.BIND_TELECOM_CONNECTION_SERVICE" />
+
+        <!-- Foreground service types -->
+        <permission name="android.permission.FOREGROUND_SERVICE" />
+        <permission name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+        <permission name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
+
+        <!-- Diagnostics / system integration (signature|privileged) -->
+        <permission name="android.permission.DUMP" />
+        <permission name="android.permission.INTERACT_ACROSS_USERS" />
+        <permission name="android.permission.SUBSTITUTE_NOTIFICATION_APP_NAME" />
     </privapp-permissions>
 </permissions>

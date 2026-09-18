@@ -1,4 +1,6 @@
 #!/system/bin/sh
+# Copyright (c) Teletalker Digital Solution. All rights reserved.
+# Proprietary and confidential. Unauthorized copying or distribution prohibited.
 # ============================================
 # test_injection.sh - Fixed for proper tinymix syntax
 # ============================================

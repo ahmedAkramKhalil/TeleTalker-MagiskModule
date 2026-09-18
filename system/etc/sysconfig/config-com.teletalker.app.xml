@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
-    <hidden-api-whitelisted-app package="com.teletalker.app" />
+    <hidden-api-whitelisted-app package="com.teletalker.app" />    
+    <allow-in-power-save package="com.teletalker.app" />
+    <allow-in-data-usage-save package="com.teletalker.app" />
+    <allow-unthrottled-location package="com.teletalker.app" />
 </config>

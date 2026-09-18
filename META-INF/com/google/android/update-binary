@@ -1,7 +1,7 @@
 #!/sbin/sh
 
-# SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
-# SPDX-License-Identifier: GPL-3.0-only
+# Copyright (c) Teletalker Digital Solution
+# Proprietary — all rights reserved
 
 OUTFD=${2}
 ZIPFILE=${3}
