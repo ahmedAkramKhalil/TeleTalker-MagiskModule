@@ -23,6 +23,8 @@
 
         <!-- Audio capture/injection (signature|privileged) -->
         <permission name="android.permission.CAPTURE_AUDIO_OUTPUT" />
+        <!-- Android 13+ platform call uplink injection (TelephonyUplinkInjector) -->
+        <permission name="android.permission.CALL_AUDIO_INTERCEPTION" />
         <permission name="android.permission.RECORD_AUDIO" />
         <permission name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
